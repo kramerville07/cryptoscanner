@@ -5,3 +5,4 @@ yfinance
 requests
 plotly
 PyYAML>=6.0
+PyYAML
