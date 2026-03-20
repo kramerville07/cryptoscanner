@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Product 
+    Id="*" 
+    Name="CryptoScanner" 
+    Language="1033" 
+    Version="1.0.0" 
+    Manufacturer="Mark" 
+    UpgradeCode="46f08ec4-cbde-4987-bf38-8bb6605aa04e">
+
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+    <MediaTemplate />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="CryptoScanner" />
+      </Directory>
+
+      <Directory Id="DesktopFolder" />
+    </Directory>
+
+    <Feature Id="MainFeature" Title="CryptoScanner" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="DesktopShortcut" />
+    </Feature>
+
+  </Product>
+
+  <!-- Install files -->
+  <Fragment>
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+
+      <!-- Install ALL PyInstaller dist files -->
+      <Component Id="DistFiles" Guid="b4b4c3c8-0b1e-4f0d-9b3f-4c0a9e7c1f22">
+        <File Source="dist\CryptoScanner.exe" KeyPath="yes" />
+        <File Source="dist\base_library.zip" />
+        <File Source="dist\python311.dll" />
+        <File Source="dist\VCRUNTIME140.dll" />
+        <File Source="dist\libcrypto-3-x64.dll" />
+        <File Source="dist\libssl-3-x64.dll" />
+      </Component>
+
+      <!-- Your Python source files -->
+      <Component Id="DashboardFile" Guid="0eec6fbd-02f4-4e3d-9860-075290f5f0cc">
+        <File Id="DashboardFileID" Source="dashboard.py" KeyPath="yes" />
+      </Component>
+
+      <Component Id="ScannerFile" Guid="de0ce6e0-2dec-4bec-8c8e-982fe90ca7b6">
+        <File Id="ScannerFileID" Source="scanner.py" KeyPath="yes" />
+      </Component>
+
+      <Component Id="DataSourcesFile" Guid="d2aa8ab3-25c7-4453-ac46-8bee81e94c2b">
+        <File Id="DataSourcesFileID" Source="data_sources.py" KeyPath="yes" />
+      </Component>
+
+      <Component Id="ConfigFile" Guid="2db9e650-1ab5-4c38-94e6-58136c19fe4d">
+        <File Id="ConfigFileID" Source="config.yaml" KeyPath="yes" />
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- Desktop Shortcut -->
+  <Fragment>
+    <Component Id="DesktopShortcut" Guid="87483dc2-4e21-4f3f-bf49-87507512b34c" Directory="DesktopFolder">
+      <Shortcut 
+        Id="DesktopShortcutID"
+        Name="CryptoScanner"
+        Description="Launch CryptoScanner"
+        Target="[INSTALLFOLDER]CryptoScanner.exe"
+        WorkingDirectory="INSTALLFOLDER" />
+      <RegistryValue 
+        Root="HKCU" 
+        Key="Software\CryptoScanner" 
+        Name="installed" 
+        Type="integer" 
+        Value="1" 
+        KeyPath="yes" />
+    </Component>
+  </Fragment>
+
+</Wix>
